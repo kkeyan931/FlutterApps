@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './questionText.dart';
+import 'quizPage.dart';
+import 'resultPage.dart';
 
 void main() {
   runApp(QuizApp());
@@ -15,20 +16,44 @@ class QuizApp extends StatefulWidget {
 
 class _QuizAppState extends State<QuizApp> {
   var questionNumber = 0;
+  var totalScore = 0;
 
-  var questions = {
-    0: ["what is your name?", "karthik", "panneer", "vinoth", "kai"],
-    1: ["what is your age?", "20", "22", "25", "18"],
-    2: ["what is your height?", "180", "185", "175", "170"],
-    3: ["what is your weight?", "60", "65", "55", "50"],
-  };
+  final questions = const [
+    {
+      "question": "what language does flutter use?",
+      "answers": ["dart", "C", "C++", "python", "java"],
+      "correctAnswer": "dart",
+    },
+    {
+      "question": "which is not a flutter keyword?",
+      "answers": ["var", "final", "const", "hello"],
+      "correctAnswer": "hello",
+    },
+    {
+      "question": "who built flutter?",
+      "answers": ["Google", "FB", "Microsoft", "Oracle"],
+      "correctAnswer": "Google",
+    },
+    {
+      "question": "flutter can build?",
+      "answers": ["Android", "iOS", "Web App", "All the above"],
+      "correctAnswer": "All the above",
+    },
+  ];
 
-  void changeQuestion() {
+  void resetQuiz() {
     setState(() {
-      questionNumber++;
-      if (questionNumber == (questions.length)) {
-        questionNumber = 0;
+      questionNumber = 0;
+      totalScore = 0;
+    });
+  }
+
+  void changeQuestion(String correctAnswer) {
+    setState(() {
+      if (correctAnswer == questions[questionNumber]["correctAnswer"]) {
+        totalScore += 1;
       }
+      questionNumber++;
     });
   }
 
@@ -42,27 +67,9 @@ class _QuizAppState extends State<QuizApp> {
           ),
           backgroundColor: Colors.red.shade200,
         ),
-        body: Column(
-          children: [
-            QuestionText(questions[questionNumber]![0]),
-            ElevatedButton(
-              onPressed: changeQuestion,
-              child: QuestionText(questions[questionNumber]![1]),
-            ),
-            ElevatedButton(
-              onPressed: changeQuestion,
-              child: QuestionText(questions[questionNumber]![2]),
-            ),
-            ElevatedButton(
-              onPressed: changeQuestion,
-              child: QuestionText(questions[questionNumber]![3]),
-            ),
-            ElevatedButton(
-              onPressed: changeQuestion,
-              child: QuestionText(questions[questionNumber]![4]),
-            ),
-          ],
-        ),
+        body: questionNumber < questions.length
+            ? Quiz(questions, questionNumber, changeQuestion)
+            : Result(totalScore, resetQuiz),
       ),
     );
   }
