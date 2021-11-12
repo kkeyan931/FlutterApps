@@ -21,7 +21,7 @@ class _QuizAppState extends State<QuizApp> {
   final questions = const [
     {
       "question": "what language does flutter use?",
-      "answers": ["dart", "C", "C++", "python", "java"],
+      "answers": ["dart", "C", "C++", "python"],
       "correctAnswer": "dart",
     },
     {
